@@ -83,6 +83,7 @@ export class ExtensionLoginComponentService
    * https://developer.apple.com/forums/thread/774351
    */
   isLoginWithPasskeySupported(): boolean {
-    return this.platformUtilsService.isChromium();
+    // LOCAL PATCH: enable on Firefox (Firefox >= 150 can assert an extension RP ID)
+    return true;
   }
 }
