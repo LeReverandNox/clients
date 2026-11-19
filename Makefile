@@ -34,7 +34,7 @@ dev: deps ## Dev build in watch mode (use with about:debugging)
 package: deps ## Build and zip the extension
 	cd $(BROWSER_DIR) && npm run dist:firefox
 
-install: package ## Copy the zip to $(XPI)
+install: package ## Copy the zip to ~/.local/share/bitwarden-firefox
 	mkdir -p $(INSTALL_DIR)
 	cp $(ZIP) $(XPI)
 	@echo "Installed: $(XPI)"
