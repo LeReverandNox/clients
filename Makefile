@@ -12,9 +12,15 @@ ADDON_ID    := bitwarden-passkeys@lereverandnox.local
 # (Developer Edition / Nightly only).
 FF_LINUX    := $(HOME)/.mozilla/firefox
 FF_MACOS    := $(HOME)/Library/Application Support/Firefox/Profiles
-PROFILES    ?= $(FF_LINUX)/653g2622.dev-edition-default:$(FF_LINUX)/Np2HLnKR.Profile 1
+# tuxppsnk - Personnal
+DEFAULT_PROFILES := $(FF_LINUX)/653g2622.dev-edition-default
+# tuxppsnk - Work
+DEFAULT_PROFILES := $(DEFAULT_PROFILES):$(FF_LINUX)/Np2HLnKR.Profile 1
+# tuxeos - Personnal
+DEFAULT_PROFILES := $(DEFAULT_PROFILES):$(FF_LINUX)/nylvpg8n.dev-edition-default
 # macOS: append your profile dirs (the random prefix differs per machine), e.g.
-# PROFILES += :$(FF_MACOS)/xxxxxxxx.dev-edition-default
+# DEFAULT_PROFILES := $(DEFAULT_PROFILES):$(FF_MACOS)/xxxxxxxx.dev-edition-default
+PROFILES    ?= $(DEFAULT_PROFILES)
 
 export PROFILES
 
