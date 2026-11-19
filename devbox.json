@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
-  "packages": ["nodejs@26.11.1", "gnumake@latest", "zip@latest"],
+  "packages": ["github:NixOS/nixpkgs/nixpkgs-unstable#nodejs_24", "gnumake@latest", "zip@latest"],
   "shell": {
     "init_hook": [],
     "scripts": {}
