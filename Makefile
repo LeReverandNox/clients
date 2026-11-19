@@ -5,8 +5,10 @@ BRANCH      := firefox-passkeys
 UPSTREAM    := upstream
 BROWSER_DIR := apps/browser
 ZIP         := $(BROWSER_DIR)/dist/oss-dist-firefox.zip
-INSTALL_DIR := $(HOME)/.local/share/bitwarden-firefox
-XPI         := $(INSTALL_DIR)/bitwarden-passkeys.xpi
+ADDON_ID    := bitwarden-passkeys@lereverandnox.local
+# Firefox profiles to install into (space separated). Each needs
+# xpinstall.signatures.required=false (Developer Edition / Nightly only).
+PROFILES    ?= $(HOME)/.mozilla/firefox/653g2622.dev-edition-default
 
 .DEFAULT_GOAL := help
 .PHONY: help update deps build dev package install all
@@ -34,10 +36,13 @@ dev: deps ## Dev build in watch mode (use with about:debugging)
 package: deps ## Build and zip the extension
 	cd $(BROWSER_DIR) && npm run dist:firefox
 
-install: package ## Copy the zip to ~/.local/share/bitwarden-firefox
-	mkdir -p $(INSTALL_DIR)
-	cp $(ZIP) $(XPI)
-	@echo "Installed: $(XPI)"
-	@echo "Firefox: about:addons > gear > Install Add-on From File..."
+install: package ## Install the build into the Firefox profile(s); restart Firefox to apply
+	@for p in $(PROFILES); do \
+		mkdir -p "$$p/extensions" && \
+		cp $(ZIP) "$$p/extensions/.$(ADDON_ID).xpi.tmp" && \
+		mv -f "$$p/extensions/.$(ADDON_ID).xpi.tmp" "$$p/extensions/$(ADDON_ID).xpi" && \
+		echo "Installed into $$p"; \
+	done
+	@echo "Restart Firefox to load the new version."
 
 all: update install ## update + install
