@@ -6,9 +6,11 @@ UPSTREAM    := upstream
 BROWSER_DIR := apps/browser
 ZIP         := $(BROWSER_DIR)/dist/oss-dist-firefox.zip
 ADDON_ID    := bitwarden-passkeys@lereverandnox.local
-# Firefox profiles to install into (space separated). Each needs
-# xpinstall.signatures.required=false (Developer Edition / Nightly only).
-PROFILES    ?= $(HOME)/.mozilla/firefox/653g2622.dev-edition-default
+# Firefox profiles to install into, separated by ':' (paths may contain
+# spaces). Each needs xpinstall.signatures.required=false (Developer Edition /
+# Nightly only).
+FF_DIR      := $(HOME)/.mozilla/firefox
+PROFILES    ?= $(FF_DIR)/653g2622.dev-edition-default:$(FF_DIR)/Np2HLnKR.Profile 1
 
 .DEFAULT_GOAL := help
 .PHONY: help update deps build dev package install all
@@ -37,7 +39,7 @@ package: deps ## Build and zip the extension
 	cd $(BROWSER_DIR) && npm run dist:firefox
 
 install: package ## Install the build into the Firefox profile(s); restart Firefox to apply
-	@for p in $(PROFILES); do \
+	@IFS=:; for p in $(PROFILES); do \
 		mkdir -p "$$p/extensions" && \
 		cp $(ZIP) "$$p/extensions/.$(ADDON_ID).xpi.tmp" && \
 		mv -f "$$p/extensions/.$(ADDON_ID).xpi.tmp" "$$p/extensions/$(ADDON_ID).xpi" && \
