@@ -12,6 +12,8 @@ ADDON_ID    := bitwarden-passkeys@lereverandnox.local
 FF_DIR      := $(HOME)/.mozilla/firefox
 PROFILES    ?= $(FF_DIR)/653g2622.dev-edition-default:$(FF_DIR)/Np2HLnKR.Profile 1
 
+export PROFILES
+
 .DEFAULT_GOAL := help
 .PHONY: help update deps build dev package install all
 
@@ -39,7 +41,7 @@ package: deps ## Build and zip the extension
 	cd $(BROWSER_DIR) && npm run dist:firefox
 
 install: package ## Install the build into the Firefox profile(s); restart Firefox to apply
-	@IFS=:; for p in $(PROFILES); do \
+	@IFS=:; for p in $$PROFILES; do \
 		mkdir -p "$$p/extensions" && \
 		cp $(ZIP) "$$p/extensions/.$(ADDON_ID).xpi.tmp" && \
 		mv -f "$$p/extensions/.$(ADDON_ID).xpi.tmp" "$$p/extensions/$(ADDON_ID).xpi" && \
